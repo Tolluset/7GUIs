@@ -1,0 +1,14 @@
+{
+  "name": "7guis",
+  "version": "0.0.1",
+  "description": "Implements 7GUIs by typescript without frameworks.",
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "start": "tsc -w & http-server -c-1"
+  },
+  "author": "tolluset",
+  "license": "ISC"
+}
