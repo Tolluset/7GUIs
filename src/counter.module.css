@@ -1,0 +1,28 @@
+.counter-wrapper {
+  display: grid;
+  width: max-content;
+  border: 1px gray solid;
+  background-color: lightgray;
+  border-radius: 4px;
+}
+
+.counter-title {
+  display: grid;
+  justify-content: center;
+  background-color: gray;
+}
+
+.counter-contents {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 8px;
+  padding: 12px;
+}
+
+.counter-input {
+  width: 100px;
+}
+
+.counter-button {
+  width: 100px;
+}
