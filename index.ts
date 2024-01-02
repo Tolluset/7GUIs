@@ -1,4 +1,4 @@
-import { Counter } from "./src/counter.js";
+import { Counter } from "./src/counter/counter.js";
 
 const main = () => {
   const app = document.querySelector("#app");
