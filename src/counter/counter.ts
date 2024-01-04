@@ -9,8 +9,6 @@ const state: State = {
 };
 
 export class Counter extends Base<State> {
-  protected layout: Element;
-
   constructor(element: Element) {
     super(element, state);
   }

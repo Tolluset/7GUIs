@@ -11,8 +11,6 @@ const state: State = {
 };
 
 export class TemperatureConverter extends Base<State> {
-  protected layout: Element;
-
   constructor(element: Element) {
     super(element, state);
   }
