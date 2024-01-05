@@ -1,3 +1,30 @@
 @import "./src/counter/counter.module.css";
 @import "./src/temperature-converter/temperature-converter.module.css";
 @import "./src/flight-booker/flight-booker.module.css";
+
+.frame-wrapper {
+  display: grid;
+  width: max-content;
+  border: 1px gray solid;
+  background-color: lightgray;
+  border-radius: 4px;
+}
+
+.frame-title {
+  display: grid;
+  justify-content: center;
+  background-color: gray;
+}
+
+.frame-contents-row {
+  display: grid;
+  grid-auto-flow: row;
+  column-gap: 8px;
+  padding: 12px;
+
+.frame-contents-col {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 8px;
+  padding: 12px;
+}
