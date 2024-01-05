@@ -79,7 +79,13 @@ export class FlightBooker extends Base<State> {
           )}  />
           <input id="returnDate" class="flight-booker-input-return-date" type="date" value=${dateFormat(
             this.state.retunDate,
-          )} disabled=${this.state.selectedOption !== "return-flight"} />
+          )} ${
+            this.state.selectedOption !== "return-flight"
+              ? "disabled"
+              : !this.isValidFlightDate()
+              ? "disabled"
+              : ""
+          } />
           <button ${
             this.state.selectedOption === "return-flight" &&
             !this.isValidFlightDate()
