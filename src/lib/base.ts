@@ -1,3 +1,9 @@
+/**
+ * @description limits below
+ *
+ * - `<input>, <select>` must add `id` attribute
+ * - nested array state can't detect for re-render
+ * */
 export abstract class Base<T extends Object> {
   private element: Element;
   protected layout: Element;
@@ -24,6 +30,18 @@ export abstract class Base<T extends Object> {
 
   private setup(state: T) {
     const handler: ProxyHandler<T> = {
+      get: (_target, prop) => {
+        const target = _target as Record<string, unknown>;
+        const propName = prop.toString();
+        const value = target[propName] as unknown;
+
+        // 만약 속성이 배열이라면 배열 메서드를 감지하고 래핑
+        if (Array.isArray(value)) {
+          target[propName] = this.wrapArrayMethods(value);
+        }
+
+        return value;
+      },
       set: (target, prop, value) => {
         const diffs = diff(this.prevState, this.state);
 
@@ -40,6 +58,34 @@ export abstract class Base<T extends Object> {
 
     const proxy = new Proxy<T>(state, handler);
     return proxy;
+  }
+
+  private wrapArrayMethods(array: unknown[]): unknown[] {
+    const arrayMethods = [
+      "push",
+      "pop",
+      "shift",
+      "unshift",
+      "splice",
+      "sort",
+      "reverse",
+    ];
+
+    const wrapMethod = (method: string) => {
+      // Array 메소드 수정이지만 타입을 위해 number로 캐스트
+      let originalMethod = array[method as unknown as number];
+
+      array[method as unknown as number] = (...args: any[]) => {
+        // @ts-expect-error originalMethod has callable function
+        const result = originalMethod.apply(array, args);
+        this.render();
+        return result;
+      };
+    };
+
+    arrayMethods.forEach(wrapMethod);
+
+    return array;
   }
 
   private mount(t: DocumentFragment) {
@@ -111,6 +157,7 @@ function focusing(element: Element) {
       element.type = "text";
       element.setSelectionRange(element.value.length, element.value.length);
       element.type = prevType;
+      return;
     }
   }
 }
