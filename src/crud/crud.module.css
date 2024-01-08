@@ -1,0 +1,44 @@
+.crud-content-wrapper {
+  gap-column: 1rem;
+}
+
+.crud-input-prefix-wrapper {
+  display: flex;
+  column-gap: 12px;
+  width: 300px;
+}
+
+#crud-input-prefix {
+  width: 48px;
+}
+
+.crud-select-name-list-wrapper {
+  display: flex;
+  column-gap: 12px;
+}
+
+#crud-select-name-list {
+  width: 150px;
+}
+
+.crud-label-name {
+  display: grid;
+  width: 160px;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+.crud-label-surname {
+  display: grid;
+  width: 160px;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+#crud-input-name {
+  width: 80px;
+}
+
+#crud-input-surname {
+  width: 80px;
+}
