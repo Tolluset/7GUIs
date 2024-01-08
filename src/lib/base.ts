@@ -10,6 +10,7 @@ export abstract class Base<T extends Object> {
 
   protected state: T = {} as T;
   private prevState: T = {} as T;
+  private wrapped: unknown[];
 
   private focusedElement: Element;
 
@@ -19,6 +20,7 @@ export abstract class Base<T extends Object> {
 
     this.state = this.setup(state);
     this.prevState = copy(this.state);
+    this.wrapped = [];
 
     this.element.appendChild(this.layout);
     this.mount(this.events());
@@ -36,8 +38,9 @@ export abstract class Base<T extends Object> {
         const value = target[propName] as unknown;
 
         // 만약 속성이 배열이라면 배열 메서드를 감지하고 래핑
-        if (Array.isArray(value)) {
+        if (Array.isArray(value) && !this.wrapped?.includes(propName)) {
           target[propName] = this.wrapArrayMethods(value);
+          this.wrapped?.push(propName);
         }
 
         return value;
@@ -78,7 +81,10 @@ export abstract class Base<T extends Object> {
       array[method as unknown as number] = (...args: any[]) => {
         // @ts-expect-error originalMethod has callable function
         const result = originalMethod.apply(array, args);
+
         this.render();
+        this.prevState = {} as T;
+
         return result;
       };
     };
@@ -97,6 +103,8 @@ export abstract class Base<T extends Object> {
 
     this.mount(this.events());
     this.restoreFocus(focused);
+
+    this.wrapped = [];
   }
 
   private restoreFocus(focused: Element) {

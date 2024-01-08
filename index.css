@@ -2,6 +2,11 @@
 @import "./src/temperature-converter/temperature-converter.module.css";
 @import "./src/flight-booker/flight-booker.module.css";
 @import "./src/crud/crud.module.css";
+@import "./src/circle-drawer/circle-drawer.module.css";
+
+dialog:not([open]) {
+  display: none;
+}
 
 .grid {
   display: grid;
@@ -13,6 +18,10 @@
 
 .gap-12 {
   gap: 12px;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .frame-wrapper {
