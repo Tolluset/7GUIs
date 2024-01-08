@@ -301,7 +301,7 @@ export class CircleDrawer extends Base<State> {
     const { x, y } = this.state.circles[selectedIndex] ?? { x: 0, y: 0 };
 
     p.innerHTML = `
-      <dialog class="frame-wrapper">
+      <dialog class="frame-wrapper ${PREFIX}-dialog">
         <div class="frame-contents-row gap-12">
           <span>Adjust diameter of cirlce at (${x.toFixed(0)}, ${y.toFixed(
             0,

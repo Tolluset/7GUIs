@@ -2,3 +2,11 @@
   background-color: white;
   border: solid 1px black;
 }
+
+/**
+ * @TODO: this style is temporary
+ * */
+.circle-drawer-dialog {
+  top: 340px;
+  right: 45px;
+}
