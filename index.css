@@ -28,3 +28,11 @@
   column-gap: 8px;
   padding: 12px;
 }
+
+.grid {
+  display: grid;
+}
+
+.flex {
+  display: flex;
+}
