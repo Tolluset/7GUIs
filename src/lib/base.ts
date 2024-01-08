@@ -129,26 +129,11 @@ export abstract class Base<T extends Object> {
   }
 }
 
-function diff(obj1: any, obj2: any) {
-  const diffs = [];
+function diff(obj1: any, obj2: any): string[] {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
 
-  for (const key in obj1) {
-    if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-      if (obj1[key] !== obj2[key]) {
-        diffs.push(key);
-      }
-    } else {
-      diffs.push(key);
-    }
-  }
-
-  for (const key in obj2) {
-    if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) {
-      diffs.push(key);
-    }
-  }
-
-  return diffs;
+  return [...keys1, ...keys2].filter((key) => obj1[key] !== obj2[key]);
 }
 
 function copy(obj: unknown) {
