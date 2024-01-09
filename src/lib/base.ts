@@ -1,3 +1,13 @@
+const ARRAY_METHODS = [
+  "push",
+  "pop",
+  "shift",
+  "unshift",
+  "splice",
+  "sort",
+  "reverse",
+];
+
 /**
  * @description limits below
  *
@@ -41,6 +51,8 @@ export abstract class Base<T extends Object> {
         if (Array.isArray(value) && !this.wrapped?.includes(propName)) {
           target[propName] = this.wrapArrayMethods(value);
           this.wrapped?.push(propName);
+
+          return value;
         }
 
         return value;
@@ -64,16 +76,6 @@ export abstract class Base<T extends Object> {
   }
 
   private wrapArrayMethods(array: unknown[]): unknown[] {
-    const arrayMethods = [
-      "push",
-      "pop",
-      "shift",
-      "unshift",
-      "splice",
-      "sort",
-      "reverse",
-    ];
-
     const wrapMethod = (method: string) => {
       // Array 메소드 수정이지만 타입을 위해 number로 캐스트
       let originalMethod = array[method as unknown as number];
@@ -89,7 +91,7 @@ export abstract class Base<T extends Object> {
       };
     };
 
-    arrayMethods.forEach(wrapMethod);
+    ARRAY_METHODS.forEach(wrapMethod);
 
     return array;
   }
@@ -129,26 +131,11 @@ export abstract class Base<T extends Object> {
   }
 }
 
-function diff(obj1: any, obj2: any) {
-  const diffs = [];
+function diff(obj1: any, obj2: any): string[] {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
 
-  for (const key in obj1) {
-    if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-      if (obj1[key] !== obj2[key]) {
-        diffs.push(key);
-      }
-    } else {
-      diffs.push(key);
-    }
-  }
-
-  for (const key in obj2) {
-    if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) {
-      diffs.push(key);
-    }
-  }
-
-  return diffs;
+  return [...keys1, ...keys2].filter((key) => obj1[key] !== obj2[key]);
 }
 
 function copy(obj: unknown) {

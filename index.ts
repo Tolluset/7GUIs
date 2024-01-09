@@ -4,6 +4,7 @@ import { FlightBooker } from "./src/flight-booker/flight-booker.js";
 import { Timer } from "./src/timer/timer.js";
 import { CRUD } from "./src/crud/crud.js";
 import { CircleDrawer } from "./src/circle-drawer/circle-drawer.js";
+import { Cells } from "./src/cells/cells.js";
 
 const main = () => {
   const app = document.querySelector("#app");
@@ -18,6 +19,7 @@ const main = () => {
   new Timer(app);
   new CRUD(app);
   new CircleDrawer(app);
+  new Cells(app);
 };
 
 main();
