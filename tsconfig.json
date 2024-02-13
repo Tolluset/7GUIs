@@ -4,7 +4,7 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",
-    "lib": ["es7", "DOM"],
+    "lib": ["ES2017", "DOM"],
     "strict": false,
     "baseUrl": ".",
     "paths": {

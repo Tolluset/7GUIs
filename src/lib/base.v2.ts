@@ -1,5 +1,4 @@
 let stateId = 1;
-const listeners: { tag: HTMLElement; props: unknown }[] = [];
 
 function tag(name: keyof HTMLElementTagNameMap, ...args: unknown[]) {
   const tag = document.createElement(name);
@@ -38,16 +37,33 @@ function eventer(tag: HTMLElement, k: string, v: any) {
 }
 
 function renewal(tag: HTMLElement, k: string, v: any) {
+  if (v?._id) {
+    tag.setAttribute(k, v.value);
+    return;
+  }
+
+  console.debug("🚀 : base.v2.ts:45: v=", k, v);
+  if (k === "disabled" && v === false) {
+    tag.removeAttribute(k);
+    return;
+  }
+
   tag.setAttribute(k, v);
+
   return;
 }
 
 function observing(tag: HTMLElement, k: string, v: any) {
-  if (v.__proto__.stateId && !v.__proto__.added) {
-    v.__proto__.added = true;
-
-    listeners.push({ tag, props: { [k]: v } });
+  if (
+    v._listeners?.find(
+      (listener: { props: { value: { _id: number } } }) =>
+        listener.props.value._id === v._id,
+    )
+  ) {
+    return;
   }
+
+  v._listeners?.push({ tag, props: { [k]: v } });
 }
 
 type Tags = Partial<{
@@ -63,34 +79,41 @@ const tags: Tags = new Proxy(
   },
 );
 
-function state<T>(initVal: T): [T, (newVal: T | ((prev: T) => T)) => void] {
-  let value: T = initVal;
+function state<T>(
+  initVal: T,
+): [{ value: T }, (newVal: T | ((prev: T) => T)) => void] {
+  let _value = {
+    __proto__: {
+      get value() {
+        return this._value;
+      },
 
-  // @ts-expect-error use prorto
-  value.__proto__.stateId = ++stateId;
+      set value(v) {
+        this._value = v;
+      },
+    },
+    _id: ++stateId,
+    _listeners: [] as unknown[],
+    _value: initVal,
+  };
 
   const setValue = (_newValue: T | ((prev: T) => T)) => {
     const newValue =
       typeof _newValue === "function"
-        ? (_newValue as (prev: T) => T)(value)
+        ? (_newValue as (prev: T) => T)(_value.value)
         : _newValue;
 
-    value = newValue;
-
-    listeners.forEach((listener) => {
-      for (let [k, v] of Object.entries(listener.props)) {
-        // @ts-expect-error use prorto
-        if (v.__proto__.stateId === value.__proto__.stateId) {
-          // @ts-expect-error value will be updated
-          listener.props[k] = newValue;
+    _value._listeners.forEach((listener) => {
+      for (let [_, v] of Object.entries(listener.props)) {
+        if (v._id === _value._id) {
+          _value.value = newValue;
         }
       }
 
       update(listener.tag, listener.props);
     });
   };
-
-  return [value, setValue];
+  return [_value, setValue];
 }
 
 export { tags, state };

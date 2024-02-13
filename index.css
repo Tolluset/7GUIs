@@ -48,6 +48,7 @@ dialog:not([open]) {
   grid-auto-flow: row;
   column-gap: 8px;
   padding: 12px;
+}
 
 .frame-contents-col {
   display: grid;
@@ -55,4 +56,3 @@ dialog:not([open]) {
   column-gap: 8px;
   padding: 12px;
 }
-
